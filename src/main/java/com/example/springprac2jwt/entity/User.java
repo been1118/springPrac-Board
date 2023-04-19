@@ -30,8 +30,4 @@ public class User {
         this.password = password;
     }
 
-    public User(SignupRequestDto signupRequestDto) {
-        this.username = signupRequestDto.getUsername();
-        this.password = signupRequestDto.getPassword();
-    }
 }
