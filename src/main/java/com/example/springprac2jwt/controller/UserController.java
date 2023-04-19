@@ -26,7 +26,6 @@ public class UserController {
     @ResponseBody
     @PostMapping("/login")
     public ResponseDto<?> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        System.out.println(loginRequestDto.getPassword() + "   "  + loginRequestDto.getUsername());
         return userService.login(loginRequestDto, response);
     }
 
