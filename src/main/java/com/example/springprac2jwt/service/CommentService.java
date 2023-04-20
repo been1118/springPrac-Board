@@ -32,7 +32,6 @@ public class CommentService {
     @Transactional
     public ResponseDto<?> createComment(Long postId, CommentRequestDto commentRequestDto, HttpServletRequest request){
         String token = jwtUtil.resolveToken(request);
-        System.out.println("token : " + token);
         Claims claims;
         if(token == null) return ResponseDto.set(false, 401, "토큰이 존재하지 않음");
         if (jwtUtil.validateToken(token)) {
@@ -54,6 +53,31 @@ public class CommentService {
         comment.setUser(user);
 
         commentRepository.save(comment);
+        return ResponseDto.setSuccess(comment);
+    }
+
+    @Transactional
+    public ResponseDto<?> updateComment(Long commentId, CommentRequestDto commentRequestDto, HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        Claims claims;
+        if(token == null) return ResponseDto.set(false, 401, "토큰이 존재하지 않음");
+        if (jwtUtil.validateToken(token)) {
+            // 토큰에서 사용자 정보 가져오기
+            claims = jwtUtil.getUserInfoFromToken(token);
+        } else {
+            return ResponseDto.set(false, 403, "토큰 에러");
+        }
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
+        );
+        User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+        );
+        if(comment.getUser() != user ){
+            return ResponseDto.set(false, 403, "수정할 권한이 없음");
+        }
+        comment.updateComment(commentRequestDto);
         return ResponseDto.setSuccess(comment);
     }
 }
