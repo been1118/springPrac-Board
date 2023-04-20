@@ -1,12 +1,12 @@
 package com.example.springprac2jwt.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 
-@Setter
-@Getter
+@Data
 @AllArgsConstructor(staticName = "set")
 public class ResponseDto<D> {
     private boolean success;

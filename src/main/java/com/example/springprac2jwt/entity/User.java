@@ -16,14 +16,16 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "user_id")
+    private Long id;//PK
 
     @Column(nullable = false, unique = true)
     private String username;
 
-    @JsonIgnore
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
+
 
     public User(String username, String password) {
         this.username = username;

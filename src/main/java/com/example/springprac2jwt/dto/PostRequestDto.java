@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class PostRequestDto {
 
     private String title;
-    private String username;
     private String post;
     @CreatedDate
     private LocalDateTime createdAt;
