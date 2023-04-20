@@ -28,14 +28,15 @@ public class User {
     @JsonIgnore
     private String password;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRole role;
 
-    public User(String username, String password) {
+
+    public User(String username, String password, UserRole role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
-//    public User(SignupRequestDto signupRequestDto) {
-//        this.username = signupRequestDto.getUsername();
-//        this.password = signupRequestDto.getPassword();
-//    }
 }

@@ -4,6 +4,7 @@ import com.example.springprac2jwt.dto.LoginRequestDto;
 import com.example.springprac2jwt.dto.ResponseDto;
 import com.example.springprac2jwt.dto.SignupRequestDto;
 import com.example.springprac2jwt.entity.User;
+import com.example.springprac2jwt.entity.UserRole;
 import com.example.springprac2jwt.jwt.JwtUtil;
 import com.example.springprac2jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +18,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private final JwtUtil jwtUtil;
+
     @Transactional
     public ResponseDto<?> signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
         String password = signupRequestDto.getPassword();
+        String adminToken = signupRequestDto.getAdminToken();
+
+        if(!adminToken.equals("")) {
+            signupRequestDto.setAdmin(true);
+        }
 
         // 회원 중복 확인
         Optional<User> found = userRepository.findByUsername(username);
@@ -29,7 +37,16 @@ public class UserService {
             return ResponseDto.set(false, 409, "중복된 사용자가 있습니다.");
         }
 
-        User user = new User(username, password);
+        //관리자 확인
+         UserRole role = UserRole.USER;
+         if(signupRequestDto.isAdmin()) {
+            if (!signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
+                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+            }
+         role = UserRole.ADMIN;
+         }
+
+        User user = new User(username, password, role);
         userRepository.save(user);
         return ResponseDto.setSuccess(username);
     }
