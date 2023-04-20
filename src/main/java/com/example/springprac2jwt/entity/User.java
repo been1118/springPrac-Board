@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,8 +34,8 @@ public class User {
         this.password = password;
     }
 
-    public User(SignupRequestDto signupRequestDto) {
-        this.username = signupRequestDto.getUsername();
-        this.password = signupRequestDto.getPassword();
-    }
+//    public User(SignupRequestDto signupRequestDto) {
+//        this.username = signupRequestDto.getUsername();
+//        this.password = signupRequestDto.getPassword();
+//    }
 }
