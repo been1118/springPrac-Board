@@ -25,7 +25,7 @@ public class UserService {
 
         // 회원 중복 확인
         Optional<User> found = userRepository.findByUsername(username);
-        if (found.isPresent()) {
+        if(found.isPresent()) {
             return ResponseDto.set(false, 409, "중복된 사용자가 있습니다.");
         }
 
@@ -48,7 +48,7 @@ public class UserService {
             return ResponseDto.set(false, 401, "비밀번호가 일치하지 않습니다.");
         }
 
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
         return ResponseDto.setSuccess(user);
     }
 }

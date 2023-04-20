@@ -2,6 +2,7 @@ package com.example.springprac2jwt.jwt;
 
 
 
+import com.example.springprac2jwt.entity.UserRole;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
