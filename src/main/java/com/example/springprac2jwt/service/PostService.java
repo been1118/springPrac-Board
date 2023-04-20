@@ -7,6 +7,7 @@ import com.example.springprac2jwt.entity.User;
 import com.example.springprac2jwt.jwt.JwtUtil;
 import com.example.springprac2jwt.repository.PostRepository;
 import com.example.springprac2jwt.repository.UserRepository;
+import com.example.springprac2jwt.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -69,11 +70,19 @@ public class PostService {
         User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
                 () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
         );
-
+        /************관리자 권한 *********************/
+        if(user.getRole() == user.getRole().ADMIN) {
+            post.update(postRequestDto);
+            return ResponseDto.setSuccess(post);
+        }
+        /*****************************************/
         if (post.getUser().getUsername().equals(claims.getSubject())) {
             post.update(postRequestDto);
-        } else return ResponseDto.set(false, 403, "수정할 권한이 없음");
-        return ResponseDto.setSuccess(post);
+            return ResponseDto.setSuccess(post);
+        } else {
+            return ResponseDto.set(false, 403, "수정할 권한이 없음");
+        }
+
     }
 
     @Transactional
@@ -88,11 +97,22 @@ public class PostService {
         } else {
             return ResponseDto.set(false, 403, "토큰 에러");
         }
-        // 토큰에서 가져온 사용자 정보를 사용하여 DB 조회
+        User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+        );
+
+        /************관리자 권한 *********************/
+        if(user.getRole() == user.getRole().ADMIN) {
+            postRepository.deleteById(id);
+            return ResponseDto.setSuccess(id);
+        }
+        /*****************************************/
         if (post.getUser().getUsername().equals(claims.getSubject())) {
             postRepository.deleteById(id);
-        } else return ResponseDto.set(false, 403, "삭제할 수 없습니다.");
-        return ResponseDto.setSuccess(post);
+            return ResponseDto.setSuccess(id);
+        } else {
+            return ResponseDto.set(false, 403, "삭제할 권한이 없음");
+        }
     }
 
 
