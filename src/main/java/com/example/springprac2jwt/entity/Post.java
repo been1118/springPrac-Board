@@ -33,7 +33,8 @@ public class Post extends Timestamped{
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;  //fk
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    @OrderBy("createdAt DESC")
     private List<Comment> commentList = new ArrayList<>();
 
 
