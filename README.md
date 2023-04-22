@@ -1,6 +1,6 @@
 # springPrac2-jwt
 
-#과제 기여자
+# 과제 기여자
 ###  LV.3 been1118 & OliveLover
 https://github.com/OliveLover
 
