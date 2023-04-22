@@ -25,7 +25,7 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/login")
-    public ResponseDto<?> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public ResponseDto<?> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         return userService.login(loginRequestDto, response);
     }
 

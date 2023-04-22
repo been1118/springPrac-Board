@@ -1,7 +1,7 @@
 package com.example.springprac2jwt.entity;
 
 import com.example.springprac2jwt.dto.CommentRequestDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,17 +20,19 @@ public class Comment extends Timestamped{
     @Column(nullable = false)
     private String comment;
 
-    @JsonIgnore
+    @JsonBackReference
     @JoinColumn(name = "post_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Post post;  //fk
 
-    @JsonIgnore
+
     @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private User user;  //fk
 
-    public Comment(CommentRequestDto commentRequestDto) {
+    public Comment(User user, Post post, CommentRequestDto commentRequestDto) {
+        this.user = user;
+        this.post = post;
         this.comment = commentRequestDto.getComment();
     }
 

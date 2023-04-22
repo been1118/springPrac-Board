@@ -1,7 +1,6 @@
 package com.example.springprac2jwt.entity;
 
 import com.example.springprac2jwt.dto.PostRequestDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,9 +27,8 @@ public class Post extends Timestamped{
     private String post;
 
 
-    @JsonIgnore
     @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private User user;  //fk
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
@@ -39,18 +37,27 @@ public class Post extends Timestamped{
 
 
 
-    public Post(PostRequestDto requestDto, User user) {
+    public Post(String title, String post, User user) {
+        this.title = title;
+        this.post = post;
         this.user = user;
-        this.title = requestDto.getTitle();
-        this.post = requestDto.getPost();
     }
 
-    public void update(PostRequestDto postRequestDto) {
-        this.post = postRequestDto.getPost();
+    public Post(PostRequestDto boardDTO){
+        this.title = boardDTO.getTitle();
+        this.post = boardDTO.getPost();
     }
 
-    public void addComment(Comment comment){
-        commentList.add(comment);
-        comment.setPost(this);
+    public void update(PostRequestDto boardDTO) {
+        this.title = boardDTO.getTitle();
+        this.post = boardDTO.getPost();
+    }
+
+    public void addComment(List<Comment> commentList){
+        this.commentList = commentList;
+    }
+
+    public void addUser(User user) {
+        this.user = user;
     }
 }

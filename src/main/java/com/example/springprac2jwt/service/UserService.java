@@ -39,12 +39,12 @@ public class UserService {
 
         //관리자 확인
          UserRole role = UserRole.USER;
-         if(signupRequestDto.isAdmin()) {
+        if (signupRequestDto.isAdmin()) {
             if (!signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
                 throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
             }
-         role = UserRole.ADMIN;
-         }
+            role = UserRole.ADMIN;
+        }
 
         User user = new User(username, password, role);
         userRepository.save(user);
