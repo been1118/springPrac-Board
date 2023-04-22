@@ -1,7 +1,10 @@
 # springPrac2-jwt
 
-# LV.3 과제 기여자
-### been1118 & OliveLover
+# 과제 기여자
+###  LV.4 (Spring Security) been1118 & limseulki
+https://github.com/limseulki
+
+###  LV.3 (Comment, admin account) been1118 & OliveLover
 https://github.com/OliveLover
 
 # ERD 설계
