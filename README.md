@@ -1,7 +1,7 @@
 # springPrac2-jwt
 
-# LV.3 과제 기여자
-### been1118 & OliveLover
+#과제 기여자
+###  LV.3 been1118 & OliveLover
 https://github.com/OliveLover
 
 # ERD 설계
