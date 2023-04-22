@@ -8,6 +8,7 @@ import com.example.springprac2jwt.entity.UserRole;
 import com.example.springprac2jwt.jwt.JwtUtil;
 import com.example.springprac2jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,12 @@ public class UserService {
     private final UserRepository userRepository;
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public ResponseDto<?> signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
-        String password = signupRequestDto.getPassword();
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
         String adminToken = signupRequestDto.getAdminToken();
 
         if(!adminToken.equals("")) {
@@ -61,7 +63,7 @@ public class UserService {
                 () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
         );
         // 비밀번호 확인
-        if(!user.getPassword().equals(password)){
+        if(!passwordEncoder.matches(password, user.getPassword())){
             return ResponseDto.set(false, 401, "비밀번호가 일치하지 않습니다.");
         }
 

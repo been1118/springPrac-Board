@@ -58,7 +58,6 @@ public class CommentService {
         if (comment.getUser() == user || user.getRole() == user.getRole().ADMIN) {
             commentRepository.deleteById(id);
             return ResponseDto.setSuccess(id);
-
         } else {
             return ResponseDto.set(false, 403, "삭제할 권한이 없음");
         }
@@ -70,4 +69,3 @@ public class CommentService {
         return comment;
     }
 }
-
