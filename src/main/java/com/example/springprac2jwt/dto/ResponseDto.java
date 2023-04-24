@@ -2,8 +2,6 @@ package com.example.springprac2jwt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 
 @Data

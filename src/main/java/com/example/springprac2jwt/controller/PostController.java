@@ -1,4 +1,4 @@
-package com.example.springprac2jwt.controller;;
+package com.example.springprac2jwt.controller;
 
 import com.example.springprac2jwt.Security.UserDetailsImpl;
 import com.example.springprac2jwt.dto.PostRequestDto;
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+;
 
 
 @RequiredArgsConstructor

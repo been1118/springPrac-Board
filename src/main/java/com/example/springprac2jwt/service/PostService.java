@@ -4,15 +4,11 @@ import com.example.springprac2jwt.dto.PostRequestDto;
 import com.example.springprac2jwt.dto.ResponseDto;
 import com.example.springprac2jwt.entity.Post;
 import com.example.springprac2jwt.entity.User;
-import com.example.springprac2jwt.jwt.JwtUtil;
 import com.example.springprac2jwt.repository.PostRepository;
-import com.example.springprac2jwt.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.NoSuchElementException;
 
