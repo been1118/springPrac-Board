@@ -11,7 +11,7 @@ https://github.com/limseulki
 https://github.com/OliveLover
 
 # ERD 설계
-![erd](https://d2sqqdb3t4xrq5.cloudfront.net/upload/hptpxJ4H72cXKgCQ3/NXNKZnlNVGI1aFd4Q1l4Y1dfSEFLZXV6cEZSdDdKd3BYcXgucG5n)
+![erd](https://d2sqqdb3t4xrq5.cloudfront.net/upload/hptpxJ4H72cXKgCQ3/NXNKZnlNVGI1aFd4Q1l4Y1dfSEFLZXV6cEZSdDdKd3BYcXgucG5n) 
 
 # API 명세서
 https://app.gitbook.com/o/vizgVaHTYOIrjdCBNg12/s/Y8kqasaBTVk5oCEY109Q/3
