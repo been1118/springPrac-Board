@@ -2,8 +2,10 @@ package com.example.springprac2jwt.service;
 
 import com.example.springprac2jwt.dto.PostRequestDto;
 import com.example.springprac2jwt.dto.ResponseDto;
+import com.example.springprac2jwt.entity.Comment;
 import com.example.springprac2jwt.entity.Post;
 import com.example.springprac2jwt.entity.User;
+import com.example.springprac2jwt.exception.CustomException;
 import com.example.springprac2jwt.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import static com.example.springprac2jwt.exception.ErrorCode.COMMENT_NOT_FOUND;
+import static com.example.springprac2jwt.exception.ErrorCode.POST_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -63,10 +68,10 @@ public class PostService {
             return ResponseDto.set(false, 403, "삭제할 권한이 없음");
         }
     }
-    //게시글 존재 여부 확인
-    protected Post getPostIfExists(Long id) {
+    private Post getPostIfExists(Long id) {
         Post post = postRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("게시글이 존재하지 않습니다."));
+                () -> new CustomException(POST_NOT_FOUND)
+        );
         return post;
     }
 

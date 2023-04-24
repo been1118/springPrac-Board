@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -39,18 +40,23 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeHttpRequests().antMatchers("/api/user/**", "/api/read/**").permitAll()
-                .anyRequest().authenticated()
-                // JWT 인증/인가를 사용하기 위한 설정
-                .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        // CSRF 설정
+        http.csrf().disable();
 
+        // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+        // 접근 허용 설정
+        http.authorizeRequests()
+                // auth 폴더를 login 없이 허용
+                .antMatchers("/api/auth/**").permitAll()
+                // 로그인 안 한 사용자도 전체 게시글 목록 조회 가능하도록 허용
+                .antMatchers("/api/posts").permitAll()
+                // 그 외의 어떤 요청이든 인증처리 하겠다는 의미
+                .anyRequest().authenticated();
 
-        http.formLogin().loginPage("/api/user/login-page").permitAll();
-
-        http.exceptionHandling().accessDeniedPage("/api/user/forbidden");
+        // JWT 인증/인가를 사용하기 위한 설정
+        http.addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

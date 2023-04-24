@@ -5,6 +5,7 @@ import com.example.springprac2jwt.entity.Comment;
 import com.example.springprac2jwt.entity.Likes;
 import com.example.springprac2jwt.entity.Post;
 import com.example.springprac2jwt.entity.User;
+import com.example.springprac2jwt.exception.CustomException;
 import com.example.springprac2jwt.repository.CommentRepository;
 import com.example.springprac2jwt.repository.LikeRepository;
 import com.example.springprac2jwt.repository.PostRepository;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static com.example.springprac2jwt.exception.ErrorCode.COMMENT_NOT_FOUND;
+import static com.example.springprac2jwt.exception.ErrorCode.POST_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -54,16 +58,16 @@ public class LikeService {
         return ResponseDto.setSuccess(likeRepository.countByPostIdAndCommentId(postId, commentId));
     }
 
-    //게시글 존재 여부 확인
     private Post getPostIfExists(Long id) {
         Post post = postRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("게시글이 존재하지 않습니다."));
+                () -> new CustomException(POST_NOT_FOUND)
+        );
         return post;
     }
-    //댓글 존재 여부 확인
+    //댓글 존재여부 확인
     private Comment checkComment(Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
+                () -> new CustomException(COMMENT_NOT_FOUND)
         );
         return comment;
     }

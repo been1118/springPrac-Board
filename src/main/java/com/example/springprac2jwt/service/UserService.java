@@ -5,6 +5,7 @@ import com.example.springprac2jwt.dto.ResponseDto;
 import com.example.springprac2jwt.dto.SignupRequestDto;
 import com.example.springprac2jwt.entity.User;
 import com.example.springprac2jwt.entity.UserRole;
+import com.example.springprac2jwt.exception.CustomException;
 import com.example.springprac2jwt.jwt.JwtUtil;
 import com.example.springprac2jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
+
+import static com.example.springprac2jwt.exception.ErrorCode.CANNOT_FOUND_USER;
+import static com.example.springprac2jwt.exception.ErrorCode.NOT_MATCH_ADMIN_TOKEN;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +48,7 @@ public class UserService {
          UserRole role = UserRole.USER;
         if (signupRequestDto.isAdmin()) {
             if (!signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
-                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+                throw new CustomException(NOT_MATCH_ADMIN_TOKEN);
             }
             role = UserRole.ADMIN;
         }
@@ -61,7 +65,7 @@ public class UserService {
 
         // 사용자 확인
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
+                () -> new CustomException(CANNOT_FOUND_USER)
         );
         // 비밀번호 확인
         if(!passwordEncoder.matches(password, user.getPassword())){
