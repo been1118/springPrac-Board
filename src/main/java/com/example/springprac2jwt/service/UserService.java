@@ -23,12 +23,13 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
+    //회원가입
     @Transactional
     public ResponseDto<?> signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
         String password = passwordEncoder.encode(signupRequestDto.getPassword());
         String adminToken = signupRequestDto.getAdminToken();
-
+        //어드민 토큰 확인
         if(!adminToken.equals("")) {
             signupRequestDto.setAdmin(true);
         }
@@ -52,7 +53,7 @@ public class UserService {
         userRepository.save(user);
         return ResponseDto.setSuccess(username);
     }
-
+    //로그인
     @Transactional(readOnly = true)
     public ResponseDto<?> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String username = loginRequestDto.getUsername();

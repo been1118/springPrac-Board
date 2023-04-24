@@ -29,7 +29,7 @@ public class LikeService {
     public ResponseDto<?> Likes(Long postId, User user){
         Post post = getPostIfExists(postId);
 
-        if(postLikeCheck(user, post, null)){
+        if(postLikeCheck(user, post, null)){//좋아요가 있으면 DB에서 삭제, 없으면 생성
             likeRepository.deleteByUserIdAndPostIdAndCommentId(user.getId(), postId, null);
         } else {
             Likes like = new Likes(user, post, null);
@@ -45,7 +45,7 @@ public class LikeService {
 
         Comment comment =  checkComment(commentId);
 
-       if(commentLikeCheck(user, post, comment))  {
+       if(commentLikeCheck(user, post, comment))  {//좋아요가 있으면 DB에서 삭제, 없으면 생성
            likeRepository.deleteByUserIdAndPostIdAndCommentId(user.getId(), postId, commentId);
        } else {
            Likes like = new Likes(user, post,  comment);

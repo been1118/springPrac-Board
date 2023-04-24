@@ -17,6 +17,7 @@ import java.util.NoSuchElementException;
 public class PostService {
     private final PostRepository postRepository;
 
+    //게시글 작성
     @Transactional
     public ResponseDto<?> createPost(PostRequestDto postRequestDto, User user) {
         Post post = new Post(postRequestDto);
@@ -25,21 +26,23 @@ public class PostService {
         postRepository.save(post);
         return ResponseDto.setSuccess(post);
     }
-
+    //게시글 전체 조회
     @Transactional(readOnly = true)
     public ResponseDto<?> getPosts() {
         List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc();
         return ResponseDto.setSuccess(postList);
     }
+    //게시글 상세 조회
     @Transactional(readOnly = true)
     public ResponseDto<?> getPost(Long id) {
         return ResponseDto.setSuccess(getPostIfExists(id));
     }
 
+    //게시글 수정
     @Transactional
     public ResponseDto<?> updatePost(Long id, PostRequestDto postRequestDto, User user) {
         Post post = getPostIfExists(id);
-
+        //유저 확인
         if (post.getUser().getUsername().equals(user.getUsername()) || user.getRole() == user.getRole().ADMIN) {
             post.update(postRequestDto);
             return ResponseDto.setSuccess(post);
@@ -48,11 +51,11 @@ public class PostService {
         }
 
     }
-
+    //게시글 삭제
     @Transactional
     public ResponseDto<?> deletePost(Long id, User user) {
         Post post = getPostIfExists(id);
-
+        //유저 확인
         if (post.getUser().getUsername().equals(user.getUsername()) || user.getRole() == user.getRole().ADMIN) {
             postRepository.deleteById(id);
             return ResponseDto.setSuccess(id);
@@ -60,7 +63,7 @@ public class PostService {
             return ResponseDto.set(false, 403, "삭제할 권한이 없음");
         }
     }
-
+    //게시글 존재 여부 확인
     protected Post getPostIfExists(Long id) {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("게시글이 존재하지 않습니다."));

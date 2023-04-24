@@ -42,24 +42,12 @@ public class Comment extends Timestamped{
         this.comment = commentRequestDto.getComment();
     }
 
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
     public void setUser(User user){
         this.user = user;
     }
 
     public void updateComment(CommentRequestDto commentRequestDto){
         this.comment = commentRequestDto.getComment();
-    }
-
-    public void addLike() {
-        likeCount += 1;
-    }
-
-    public void delLike() {
-        likeCount -= 1;
     }
 
 }

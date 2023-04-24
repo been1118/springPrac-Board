@@ -21,6 +21,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostService postService;
 
+    //댓글 작성
     @Transactional
     public ResponseDto<?> createComment(CommentRequestDto commentRequestDto, User user){
         Post post = postService.getPostIfExists(commentRequestDto.getPost_id());
@@ -34,7 +35,7 @@ public class CommentService {
         postRepository.save(post);
         return ResponseDto.setSuccess(comment);
     }
-
+    //댓글 수정
     @Transactional
     public ResponseDto<?> updateComment(Long id, CommentRequestDto commentRequestDto, User user) {
         Comment comment = checkComment(id);
@@ -46,7 +47,7 @@ public class CommentService {
         return ResponseDto.set(false, 403, "수정할 권한이 없음");
         }
     }
-
+    //댓글 삭제
     @Transactional
     public ResponseDto<?> deleteComment(Long id, User user) {
         Comment comment = checkComment(id);
@@ -58,6 +59,7 @@ public class CommentService {
             return ResponseDto.set(false, 403, "삭제할 권한이 없음");
         }
     }
+    //게시글 존재 여부 확인
     private Comment checkComment(Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("게시글이 존재하지 않습니다.")

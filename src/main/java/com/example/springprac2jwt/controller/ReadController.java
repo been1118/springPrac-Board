@@ -13,11 +13,12 @@ public class ReadController {
 
     private final PostService postService;
 
+    //게시글 전체조회
     @GetMapping("/api/read")
     public ResponseDto<?> getPosts(){
         return postService.getPosts();
     }
-
+    //게시글 상세조회
     @GetMapping("/api/read/{id}")
     public ResponseDto<?> getPost(@PathVariable Long id) {
         return postService.getPost(id);

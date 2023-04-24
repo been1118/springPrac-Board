@@ -17,12 +17,12 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
-
+    //회원가입
     @PostMapping("/signup")
     public ResponseDto<?> signup(@Valid SignupRequestDto signupRequestDto) {
         return userService.signup(signupRequestDto);
     }
-
+    //로그인
     @ResponseBody
     @PostMapping("/login")
     public ResponseDto<?> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {

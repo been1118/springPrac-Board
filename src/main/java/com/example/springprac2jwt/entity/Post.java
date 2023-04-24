@@ -66,11 +66,4 @@ public class Post extends Timestamped{
         this.user = user;
     }
 
-    public void addLike() {
-        likeCount += 1;
-    }
-
-    public void delLike() {
-        likeCount -= 1;
-    }
 }

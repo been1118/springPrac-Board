@@ -15,3 +15,4 @@ public class ResponseDto<D> {
         return ResponseDto.set(true, 200, data);
     }
 }
+//리턴값을 데이터에 담아서 클라이언트로 보냄

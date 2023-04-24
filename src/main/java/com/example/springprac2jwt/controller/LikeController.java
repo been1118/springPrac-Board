@@ -25,7 +25,7 @@ public class LikeController {
 
 
 
-    //댓글좋아요
+    //댓글 좋아요
     @PostMapping("like/{postId}/{commentId}")
     public ResponseDto<?> commentLikes(@PathVariable Long postId, @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return likesService.Likes(postId, commentId, userDetails.getUser());
