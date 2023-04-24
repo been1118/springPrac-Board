@@ -4,6 +4,7 @@ import com.example.springprac2jwt.dto.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,12 +29,16 @@ public class Post extends Timestamped{
 
 
     @JoinColumn(name = "user_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;  //fk
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     @OrderBy("createdAt DESC")
     private List<Comment> commentList = new ArrayList<>();
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private int likeCount;
 
 
 
@@ -59,5 +64,13 @@ public class Post extends Timestamped{
 
     public void addUser(User user) {
         this.user = user;
+    }
+
+    public void addLike() {
+        likeCount += 1;
+    }
+
+    public void delLike() {
+        likeCount -= 1;
     }
 }

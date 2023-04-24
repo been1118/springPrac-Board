@@ -4,6 +4,7 @@ import com.example.springprac2jwt.dto.CommentRequestDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -22,13 +23,18 @@ public class Comment extends Timestamped{
 
     @JsonBackReference
     @JoinColumn(name = "post_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Post post;  //fk
 
 
     @JoinColumn(name = "user_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;  //fk
+
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private int likeCount;
 
     public Comment(User user, Post post, CommentRequestDto commentRequestDto) {
         this.user = user;
@@ -46,6 +52,14 @@ public class Comment extends Timestamped{
 
     public void updateComment(CommentRequestDto commentRequestDto){
         this.comment = commentRequestDto.getComment();
+    }
+
+    public void addLike() {
+        likeCount += 1;
+    }
+
+    public void delLike() {
+        likeCount -= 1;
     }
 
 }
