@@ -27,17 +27,6 @@ public class PostService {
         postRepository.save(post);
         return ResponseDto.setSuccess(post);
     }
-    //게시글 전체 조회
-    @Transactional(readOnly = true)
-    public ResponseDto<?> getPosts() {
-        List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc();
-        return ResponseDto.setSuccess(postList);
-    }
-    //게시글 상세 조회
-    @Transactional(readOnly = true)
-    public ResponseDto<?> getPost(Long id) {
-        return ResponseDto.setSuccess(getPostIfExists(id));
-    }
 
     //게시글 수정
     @Transactional
