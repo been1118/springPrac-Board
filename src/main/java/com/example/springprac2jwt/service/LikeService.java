@@ -32,7 +32,7 @@ public class LikeService {
     @Transactional
     public ResponseDto<?> Likes(Long postId, User user){
         Post post = getPostIfExists(postId);
-
+        long likesCheck = 0L;
         if(postLikeCheck(user, post, null)){//좋아요가 있으면 DB에서 삭제, 없으면 생성
             likeRepository.deleteByUserIdAndPostIdAndCommentId(user.getId(), postId, null);
         } else {

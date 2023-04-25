@@ -1,6 +1,7 @@
 package com.example.springprac2jwt.entity;
 
 import com.example.springprac2jwt.dto.PostRequestDto;
+import com.example.springprac2jwt.repository.LikeRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,7 +39,7 @@ public class Post extends Timestamped{
 
     @Column(nullable = false)
     @ColumnDefault("0")
-    private int likeCount;
+    private long likeCount;
 
 
     public Post(PostRequestDto postRequestDto){
