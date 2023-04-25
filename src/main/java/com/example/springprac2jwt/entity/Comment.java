@@ -21,20 +21,18 @@ public class Comment extends Timestamped{
     @Column(nullable = false)
     private String comment;
 
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private long likeCount;
+
     @JsonBackReference
     @JoinColumn(name = "post_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;  //fk
 
-
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;  //fk
-
-
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private long likeCount;
 
     public Comment(User user, Post post, CommentRequestDto commentRequestDto) {
         this.user = user;

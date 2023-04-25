@@ -20,7 +20,6 @@ import static com.example.springprac2jwt.exception.ErrorCode.POST_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class LikeService {
 
     private final PostRepository postRepository;

@@ -27,6 +27,9 @@ public class Post extends Timestamped{
     @Column(nullable = false)
     private String post;
 
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private long likeCount;
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,11 +38,6 @@ public class Post extends Timestamped{
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     @OrderBy("createdAt DESC")
     private List<Comment> commentList = new ArrayList<>();
-
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private long likeCount;
-
 
     public Post(PostRequestDto postRequestDto){
         this.title = postRequestDto.getTitle();
