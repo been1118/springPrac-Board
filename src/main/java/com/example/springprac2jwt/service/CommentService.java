@@ -24,8 +24,8 @@ public class CommentService {
 
     //댓글 작성
     @Transactional
-    public ResponseDto<?> createComment(CommentRequestDto commentRequestDto, User user){
-        Post post = getPostIfExists(commentRequestDto.getPost_id());
+    public ResponseDto<?> createComment(Long id, CommentRequestDto commentRequestDto, User user){
+        Post post = getPostIfExists(id);
         Comment comment = new Comment(user, post, commentRequestDto);
 
         List<Comment> commentList = post.getCommentList();
