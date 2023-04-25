@@ -1,7 +1,6 @@
 package com.example.springprac2jwt.entity;
 
 import com.example.springprac2jwt.dto.PostRequestDto;
-import com.example.springprac2jwt.repository.LikeRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

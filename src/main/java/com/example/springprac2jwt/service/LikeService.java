@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.example.springprac2jwt.exception.ErrorCode.COMMENT_NOT_FOUND;
@@ -51,14 +50,14 @@ public class LikeService {
 
         Comment comment =  checkComment(commentId);
         long likesCheck = 0L;
-       if(commentLikeCheck(user, post, comment))  {//좋아요가 있으면 DB에서 삭제, 없으면 생성
+        if(commentLikeCheck(user, post, comment))  {//좋아요가 있으면 DB에서 삭제, 없으면 생성
            likeRepository.deleteByUserIdAndPostIdAndCommentId(user.getId(), postId, commentId);
-       } else {
+        } else {
            Likes like = new Likes(user, post,  comment);
            likeRepository.save(like);
-       }
-       likesCheck = likeRepository.countByPostIdAndCommentId(postId, commentId);
-       comment.checkLikes(likesCheck);
+        }
+        likesCheck = likeRepository.countByPostIdAndCommentId(postId, commentId);
+        comment.checkLikes(likesCheck);
         return ResponseDto.setSuccess(likesCheck);
     }
 

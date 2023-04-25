@@ -2,7 +2,6 @@ package com.example.springprac2jwt.service;
 
 import com.example.springprac2jwt.dto.PostRequestDto;
 import com.example.springprac2jwt.dto.ResponseDto;
-import com.example.springprac2jwt.entity.Comment;
 import com.example.springprac2jwt.entity.Post;
 import com.example.springprac2jwt.entity.User;
 import com.example.springprac2jwt.exception.CustomException;
@@ -12,9 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-
-import static com.example.springprac2jwt.exception.ErrorCode.COMMENT_NOT_FOUND;
 import static com.example.springprac2jwt.exception.ErrorCode.POST_NOT_FOUND;
 
 @Service
