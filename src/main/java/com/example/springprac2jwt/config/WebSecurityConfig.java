@@ -48,10 +48,9 @@ public class WebSecurityConfig {
 
         // 접근 허용 설정
         http.authorizeRequests()
-                // auth 폴더를 login 없이 허용
-                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/user/**").permitAll()
                 // 로그인 안 한 사용자도 전체 게시글 목록 조회 가능하도록 허용
-                .antMatchers("/api/posts").permitAll()
+                .antMatchers("/api/read/**").permitAll()
                 // 그 외의 어떤 요청이든 인증처리 하겠다는 의미
                 .anyRequest().authenticated();
 

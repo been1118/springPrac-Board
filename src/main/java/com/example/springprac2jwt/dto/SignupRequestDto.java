@@ -5,20 +5,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Setter
 @Getter
 public class SignupRequestDto {
 
     @NotNull
-    @Size(min = 4, max = 10)
-    @Pattern(regexp = "^[a-z0-9]{4,10}$")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z]).{4,10}$", message = "아이디는 4~10자 알파벳 소문자, 숫자로 작성해주세요.")
     private String username;
 
     @NotNull
-    @Size(min = 8, max = 15)
-    @Pattern(regexp = "^[a-zA-Z\\\\d`~!@#$%^&*()-_=+]{8,15}$")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[~!@#$%^&*()_+|<>?:{}])(?=\\S+$).{8,15}$", message = "비밀번호는 8~15자 알파벳 대소문자, 숫자, 특수문자로 작성해주세요.")
     private String password;
 
     private boolean admin = false;
