@@ -31,14 +31,13 @@ public class LikeService {
     @Transactional
     public ResponseDto<?> Likes(Long postId, User user){
         Post post = getPostIfExists(postId);
-        long likesCheck = 0L;
         if(postLikeCheck(user, post, null)){//좋아요가 있으면 DB에서 삭제, 없으면 생성
             likeRepository.deleteByUserIdAndPostIdAndCommentId(user.getId(), postId, null);
         } else {
             Likes like = new Likes(user, post, null);
             likeRepository.save(like);
         }
-        likesCheck = likeRepository.countByPostIdAndCommentId(postId, null);
+        long likesCheck = likeRepository.countByPostIdAndCommentId(postId, null);
         post.checkLikes(likesCheck);
         return ResponseDto.setSuccess(likesCheck);
     }
@@ -47,16 +46,14 @@ public class LikeService {
     @Transactional
     public ResponseDto<?> Likes(Long postId, Long commentId, User user) {
         Post post = getPostIfExists(postId);
-
         Comment comment =  checkComment(commentId);
-        long likesCheck = 0L;
         if(commentLikeCheck(user, post, comment))  {//좋아요가 있으면 DB에서 삭제, 없으면 생성
            likeRepository.deleteByUserIdAndPostIdAndCommentId(user.getId(), postId, commentId);
         } else {
            Likes like = new Likes(user, post,  comment);
            likeRepository.save(like);
         }
-        likesCheck = likeRepository.countByPostIdAndCommentId(postId, commentId);
+        long likesCheck = likeRepository.countByPostIdAndCommentId(postId, commentId);
         comment.checkLikes(likesCheck);
         return ResponseDto.setSuccess(likesCheck);
     }
