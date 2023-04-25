@@ -59,4 +59,7 @@ public class Post extends Timestamped{
         this.user = user;
     }
 
+    public void checkLikes(long likes2) {
+        this.likeCount = likes2;
+    }
 }

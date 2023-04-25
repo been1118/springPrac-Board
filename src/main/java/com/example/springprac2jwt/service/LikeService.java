@@ -39,7 +39,9 @@ public class LikeService {
             Likes like = new Likes(user, post, null);
             likeRepository.save(like);
         }
-        return ResponseDto.setSuccess(likeRepository.countByPostIdAndCommentId(postId, null));
+        likesCheck = likeRepository.countByPostIdAndCommentId(postId, null);
+        post.checkLikes(likesCheck);
+        return ResponseDto.setSuccess(likesCheck);
     }
 
     //댓글 좋아요
@@ -48,14 +50,16 @@ public class LikeService {
         Post post = getPostIfExists(postId);
 
         Comment comment =  checkComment(commentId);
-
+        long likesCheck = 0L;
        if(commentLikeCheck(user, post, comment))  {//좋아요가 있으면 DB에서 삭제, 없으면 생성
            likeRepository.deleteByUserIdAndPostIdAndCommentId(user.getId(), postId, commentId);
        } else {
            Likes like = new Likes(user, post,  comment);
            likeRepository.save(like);
        }
-        return ResponseDto.setSuccess(likeRepository.countByPostIdAndCommentId(postId, commentId));
+       likesCheck = likeRepository.countByPostIdAndCommentId(postId, commentId);
+       comment.checkLikes(likesCheck);
+        return ResponseDto.setSuccess(likesCheck);
     }
 
     private Post getPostIfExists(Long id) {
