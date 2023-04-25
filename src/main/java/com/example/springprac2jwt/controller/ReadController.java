@@ -15,12 +15,12 @@ public class ReadController {
 
     //게시글 전체조회
     @GetMapping("/api/read")
-    public ResponseDto<?> getPosts(){
+    public ResponseDto<?> readPosts(){
         return readService.readPosts();
     }
     //게시글 상세조회
     @GetMapping("/api/read/{id}")
-    public ResponseDto<?> getPost(@PathVariable Long id) {
+    public ResponseDto<?> readPost(@PathVariable Long id) {
         return readService.readPost(id);
     }
 }

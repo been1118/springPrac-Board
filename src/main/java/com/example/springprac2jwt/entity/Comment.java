@@ -48,7 +48,7 @@ public class Comment extends Timestamped{
         this.comment = commentRequestDto.getComment();
     }
 
-    public void checkLikes(long likes2) {
-        this.likeCount = likes2;
+    public void checkLikes(long likesCheck) {
+        this.likeCount = likesCheck;
     }
 }

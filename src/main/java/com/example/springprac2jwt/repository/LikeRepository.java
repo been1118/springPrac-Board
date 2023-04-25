@@ -10,3 +10,4 @@ public interface LikeRepository extends JpaRepository<Likes, Long> {
     void deleteByUserIdAndPostIdAndCommentId(Long userId, Long postId, Long commentId); //좋아요 취소
     long countByPostIdAndCommentId(Long postId, Long commentId); //좋아요 갯수 카운트
 }
+
