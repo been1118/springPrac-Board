@@ -2,15 +2,12 @@ package com.example.springprac2jwt.service;
 
 import com.example.springprac2jwt.dto.ResponseDto;
 import com.example.springprac2jwt.entity.Post;
-import com.example.springprac2jwt.exception.CustomException;
 import com.example.springprac2jwt.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static com.example.springprac2jwt.exception.ErrorCode.POST_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor

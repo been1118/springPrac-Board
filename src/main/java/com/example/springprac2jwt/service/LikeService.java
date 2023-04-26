@@ -5,18 +5,11 @@ import com.example.springprac2jwt.entity.Comment;
 import com.example.springprac2jwt.entity.Likes;
 import com.example.springprac2jwt.entity.Post;
 import com.example.springprac2jwt.entity.User;
-import com.example.springprac2jwt.exception.CustomException;
-import com.example.springprac2jwt.repository.CommentRepository;
 import com.example.springprac2jwt.repository.LikeRepository;
-import com.example.springprac2jwt.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
-
-import static com.example.springprac2jwt.exception.ErrorCode.COMMENT_NOT_FOUND;
-import static com.example.springprac2jwt.exception.ErrorCode.POST_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
