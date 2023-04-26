@@ -17,6 +17,7 @@ import static com.example.springprac2jwt.exception.ErrorCode.POST_NOT_FOUND;
 public class ReadService {
 
     private final PostRepository postRepository;
+    private final MethodService methodService;
 
     //게시글 전체 조회
     @Transactional(readOnly = true)
@@ -27,13 +28,6 @@ public class ReadService {
     //게시글 상세 조회
     @Transactional(readOnly = true)
     public ResponseDto<?> readPost(Long id) {
-        return ResponseDto.setSuccess(getPostIfExists(id));
-    }
-
-    private Post getPostIfExists(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new CustomException(POST_NOT_FOUND)
-        );
-        return post;
+        return ResponseDto.setSuccess(methodService.getPostIfExists(id));
     }
 }

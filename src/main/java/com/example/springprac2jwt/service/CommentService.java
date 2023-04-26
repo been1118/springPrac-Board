@@ -21,11 +21,12 @@ import static com.example.springprac2jwt.exception.ErrorCode.*;
 public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final MethodService methodService;
 
     //댓글 작성
     @Transactional
     public ResponseDto<?> createComment(Long id, CommentRequestDto commentRequestDto, User user){
-        Post post = getPostIfExists(id);
+        Post post = methodService.getPostIfExists(id);
         Comment comment = new Comment(user, post, commentRequestDto);
 
         List<Comment> commentList = post.getCommentList();
@@ -39,7 +40,7 @@ public class CommentService {
     //댓글 수정
     @Transactional
     public ResponseDto<?> updateComment(Long id, CommentRequestDto commentRequestDto, User user) {
-        Comment comment = checkComment(id);
+        Comment comment = methodService.checkComment(id);
         //유저 확인
         if(comment.getUser() == user || user.getRole() == user.getRole().ADMIN){
             comment.updateComment(commentRequestDto);
@@ -51,7 +52,7 @@ public class CommentService {
     //댓글 삭제
     @Transactional
     public ResponseDto<?> deleteComment(Long id, User user) {
-        Comment comment = checkComment(id);
+        Comment comment = methodService.checkComment(id);
         //유저 확인
         if (comment.getUser() == user || user.getRole() == user.getRole().ADMIN) {
             commentRepository.deleteById(id);
@@ -59,20 +60,6 @@ public class CommentService {
         } else {
             return ResponseDto.set(false, 403, "삭제할 권한이 없음");
         }
-    }
-    //게시글 존재 여부 확인
-    private Post getPostIfExists(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new CustomException(POST_NOT_FOUND)
-        );
-        return post;
-    }
-    //댓글 존재여부 확인
-    private Comment checkComment(Long id) {
-        Comment comment = commentRepository.findById(id).orElseThrow(
-                () -> new CustomException(COMMENT_NOT_FOUND)
-        );
-        return comment;
     }
 
 }

@@ -21,16 +21,14 @@ import static com.example.springprac2jwt.exception.ErrorCode.POST_NOT_FOUND;
 @Service
 @RequiredArgsConstructor
 public class LikeService {
-
-    private final PostRepository postRepository;
     private final LikeRepository likeRepository;
-    private final CommentRepository commentRepository;
+    private final MethodService methodService;
 
     //게시글 좋아요
     @Transactional
     public ResponseDto<?> Likes(Long postId, User user){
-        Post post = getPostIfExists(postId);
-        if(postLikeCheck(user, post, null)){//좋아요가 있으면 DB에서 삭제, 없으면 생성
+        Post post = methodService.getPostIfExists(postId);
+        if(methodService.postLikeCheck(user, post, null)){//좋아요가 있으면 DB에서 삭제, 없으면 생성
             likeRepository.deleteByUserIdAndPostIdAndCommentId(user.getId(), postId, null);
         } else {
             Likes like = new Likes(user, post, null);
@@ -44,9 +42,9 @@ public class LikeService {
     //댓글 좋아요
     @Transactional
     public ResponseDto<?> Likes(Long postId, Long commentId, User user) {
-        Post post = getPostIfExists(postId);
-        Comment comment =  checkComment(commentId);
-        if(commentLikeCheck(user, post, comment))  {//좋아요가 있으면 DB에서 삭제, 없으면 생성
+        Post post = methodService.getPostIfExists(postId);
+        Comment comment =  methodService.checkComment(commentId);
+        if(methodService.commentLikeCheck(user, post, comment))  {//좋아요가 있으면 DB에서 삭제, 없으면 생성
            likeRepository.deleteByUserIdAndPostIdAndCommentId(user.getId(), postId, commentId);
         } else {
            Likes like = new Likes(user, post,  comment);
@@ -55,36 +53,5 @@ public class LikeService {
         long likesCheck = likeRepository.countByPostIdAndCommentId(postId, commentId);
         comment.checkLikes(likesCheck);
         return ResponseDto.setSuccess(likesCheck);
-    }
-
-    private Post getPostIfExists(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new CustomException(POST_NOT_FOUND)
-        );
-        return post;
-    }
-    //댓글 존재여부 확인
-    private Comment checkComment(Long id) {
-        Comment comment = commentRepository.findById(id).orElseThrow(
-                () -> new CustomException(COMMENT_NOT_FOUND)
-        );
-        return comment;
-    }
-
-    //게시글 좋아요 여부 확인
-    private boolean postLikeCheck(User user, Post post, Comment comment) {
-        Optional<Likes> like = likeRepository.findByUserIdAndPostIdAndCommentId(user.getId(), post.getId(), null);
-        if(like.isPresent()) {
-            return true;
-        }
-        return false;
-    }
-    //댓글 좋아요 여부 확인
-    private boolean commentLikeCheck(User user, Post post, Comment comment) {
-        Optional<Likes> like = likeRepository.findByUserIdAndPostIdAndCommentId(user.getId(), post.getId(), comment.getId());
-        if(like.isPresent()) {
-            return true;
-        }
-        return false;
     }
 }

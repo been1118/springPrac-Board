@@ -17,6 +17,7 @@ import static com.example.springprac2jwt.exception.ErrorCode.POST_NOT_FOUND;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final MethodService methodService;
 
     //게시글 작성
     @Transactional
@@ -31,7 +32,7 @@ public class PostService {
     //게시글 수정
     @Transactional
     public ResponseDto<?> updatePost(Long id, PostRequestDto postRequestDto, User user) {
-        Post post = getPostIfExists(id);
+        Post post = methodService.getPostIfExists(id);
         //유저 확인
         if (post.getUser().getUsername().equals(user.getUsername()) || user.getRole() == user.getRole().ADMIN) {
             post.update(postRequestDto);
@@ -44,7 +45,7 @@ public class PostService {
     //게시글 삭제
     @Transactional
     public ResponseDto<?> deletePost(Long id, User user) {
-        Post post = getPostIfExists(id);
+        Post post = methodService.getPostIfExists(id);
         //유저 확인
         if (post.getUser().getUsername().equals(user.getUsername()) || user.getRole() == user.getRole().ADMIN) {
             postRepository.deleteById(id);
@@ -53,12 +54,4 @@ public class PostService {
             return ResponseDto.set(false, 403, "삭제할 권한이 없음");
         }
     }
-    private Post getPostIfExists(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new CustomException(POST_NOT_FOUND)
-        );
-        return post;
-    }
-
-
 }
