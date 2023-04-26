@@ -9,12 +9,14 @@ import com.example.springprac2jwt.repository.CommentRepository;
 import com.example.springprac2jwt.repository.LikeRepository;
 import com.example.springprac2jwt.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 import static com.example.springprac2jwt.exception.ErrorCode.COMMENT_NOT_FOUND;
 import static com.example.springprac2jwt.exception.ErrorCode.POST_NOT_FOUND;
 
+@Service
 @RequiredArgsConstructor
 public class MethodService {
 
