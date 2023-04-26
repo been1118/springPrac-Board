@@ -21,7 +21,7 @@ public class LikeService {
     @Transactional
     public ResponseDto<?> Likes(Long postId, User user){
         Post post = methodService.getPostIfExists(postId);
-        if(methodService.postLikeCheck(user, post, null)){//좋아요가 있으면 DB에서 삭제, 없으면 생성
+        if(methodService.postLikeCheck(user, post)){//좋아요가 있으면 DB에서 삭제, 없으면 생성
             likeRepository.deleteByUserIdAndPostIdAndCommentId(user.getId(), postId, null);
         } else {
             Likes like = new Likes(user, post, null);

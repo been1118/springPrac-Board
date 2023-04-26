@@ -39,7 +39,7 @@ public class MethodService {
     }
 
     //게시글 좋아요 여부 확인
-    protected boolean postLikeCheck(User user, Post post, Comment comment) {
+    protected boolean postLikeCheck(User user, Post post) {
         Optional<Likes> like = likeRepository.findByUserIdAndPostIdAndCommentId(user.getId(), post.getId(), null);
         if(like.isPresent()) {
             return true;
