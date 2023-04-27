@@ -40,8 +40,8 @@ public class JwtUtil {
     private static final String BEARER_PREFIX = "Bearer ";
     public static final String ACCESS_KEY = "ACCESS_KEY";
     public static final String REFRESH_KEY = "REFRESH_KEY";
-    private static final Date ACCESS_TIME = (Date) Date.from(Instant.now().plus(1, ChronoUnit.MINUTES));
-    private static final Date REFRESH_TIME = (Date) Date.from(Instant.now().plus(2, ChronoUnit.MINUTES));
+    private static final Date ACCESS_TIME = (Date) Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
+    private static final Date REFRESH_TIME = (Date) Date.from(Instant.now().plus(1, ChronoUnit.DAYS));
 
     @Value("${jwt.secret.key}")
     private String secretKey;
