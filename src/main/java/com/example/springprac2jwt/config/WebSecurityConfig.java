@@ -57,8 +57,7 @@ public class WebSecurityConfig {
                 .anyRequest().authenticated();
 
         // JWT 인증/인가를 사용하기 위한 설정
-        http.addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-
+        http.addFilterBefore(new JwtAuthFilter(jwtUtil, userRepository), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
