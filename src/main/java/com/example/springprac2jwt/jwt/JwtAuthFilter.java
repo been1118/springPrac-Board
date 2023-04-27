@@ -60,12 +60,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     // 인증 객체를 생성하여 SecurityContext에 설정
-    public void setAuthentication(String username) {
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
+    public void setAuthentication (String username){
         Authentication authentication = jwtUtil.createAuthentication(username);
-        context.setAuthentication(authentication);
 
-        SecurityContextHolder.setContext(context);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // security가 만드는 securityContextHolder 안에 authentication을 넣음.
+        // security가 sicuritycontxxtholder에서 인증 객체를 확인.
+        // JwtAuthFilter에서 authentication을 넣어주면 UsernamePasswordAuthenticationFilter 내부에서 인증이 된 것을 확인하고 추가적인 작업을 진행하지 않음.
     }
 
     // JWT 예외 처리를 위한 응답 설정
@@ -80,5 +81,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.error(e.getMessage());
         }
     }
-
 }
+
+

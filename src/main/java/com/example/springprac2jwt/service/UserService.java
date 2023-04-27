@@ -3,10 +3,13 @@ package com.example.springprac2jwt.service;
 import com.example.springprac2jwt.dto.LoginRequestDto;
 import com.example.springprac2jwt.dto.ResponseDto;
 import com.example.springprac2jwt.dto.SignupRequestDto;
+import com.example.springprac2jwt.dto.TokenDto;
+import com.example.springprac2jwt.entity.RefreshToken;
 import com.example.springprac2jwt.entity.User;
 import com.example.springprac2jwt.entity.UserRole;
 import com.example.springprac2jwt.exception.CustomException;
 import com.example.springprac2jwt.jwt.JwtUtil;
+import com.example.springprac2jwt.repository.RefreshTokenRepository;
 import com.example.springprac2jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +26,7 @@ import static com.example.springprac2jwt.exception.ErrorCode.NOT_MATCH_ADMIN_TOK
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
@@ -92,5 +96,10 @@ public class UserService {
         setHeader(response, tokenDto);
         //response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
         return ResponseDto.setSuccess(user);
+    }
+
+    private void setHeader(HttpServletResponse response, TokenDto tokenDto){
+        response.addHeader(JwtUtil.ACCESS_KEY, tokenDto.getAccessToken());
+        response.addHeader(JwtUtil.REFRESH_KEY, tokenDto.getRefreshToken());
     }
 }
