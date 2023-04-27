@@ -58,7 +58,7 @@ public class UserService {
         return ResponseDto.setSuccess(username);
     }
     //로그인
-    @Transactional(readOnly = true)
+    @Transactional
     public ResponseDto<?> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
@@ -72,7 +72,25 @@ public class UserService {
             return ResponseDto.set(false, 401, "비밀번호가 일치하지 않습니다.");
         }
 
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+        //아이디 정보로 토큰 생성
+        TokenDto tokenDto = jwtUtil.creatAllToken(username, user.getRole());
+
+        //Refresh토큰 있는지 확인
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(username);
+
+        /*
+        Refresh토큰 존재O -> 새로 발급후 업데이트
+        Refresh토큰 존재X -> 새로 생성후 DB에 저장
+         */
+        if(refreshToken.isPresent()){
+            refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
+        } else {
+            RefreshToken newToken = new RefreshToken(tokenDto.getRefreshToken(), username);
+            refreshTokenRepository.save(newToken);
+        }
+        //response 헤더에 AccessToken / RefreshToken
+        setHeader(response, tokenDto);
+        //response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
         return ResponseDto.setSuccess(user);
     }
 }
