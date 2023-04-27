@@ -1,9 +1,6 @@
 package com.example.springprac2jwt.service;
 
-import com.example.springprac2jwt.entity.Comment;
-import com.example.springprac2jwt.entity.CommentLikes;
-import com.example.springprac2jwt.entity.Post;
-import com.example.springprac2jwt.entity.User;
+import com.example.springprac2jwt.entity.*;
 import com.example.springprac2jwt.exception.CustomException;
 import com.example.springprac2jwt.repository.CommentRepository;
 import com.example.springprac2jwt.repository.CommentLikeRepository;
@@ -43,14 +40,14 @@ public class MethodService {
 
     //게시글 좋아요 여부 확인
     protected boolean postLikeCheck(User user, Post post) {
-        Optional<CommentLikes> like = postLikeRepository.findByUserIdAndPostId(user.getId(), post.getId());
+        Optional<PostLikes> like = postLikeRepository.findByUserIdAndPostId(user.getId(), post.getId());
         if(like.isPresent()) {
             return true;
         }
         return false;
     }
     //댓글 좋아요 여부 확인
-    protected boolean commentLikeCheck(User user, Post post, Comment comment) {
+    protected boolean commentLikeCheck(User user, Comment comment) {
         Optional<CommentLikes> like = commentLikeRepository.findByUserIdAndCommentId(user.getId(), comment.getId());
         if(like.isPresent()) {
             return true;

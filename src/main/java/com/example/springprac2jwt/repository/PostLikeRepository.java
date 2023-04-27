@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PostLikeRepository extends JpaRepository<PostLikes, Long> {
 
-    Optional<CommentLikes> findByUserIdAndPostId(Long userId, Long postId); //좋아요 확인용
+    Optional<PostLikes> findByUserIdAndPostId(Long userId, Long postId); //좋아요 확인용
     void deleteByUserIdAndPostId(Long userId, Long postId); //좋아요 취소
     long countByPostId(Long postId); //좋아요 갯수 카운트
 }

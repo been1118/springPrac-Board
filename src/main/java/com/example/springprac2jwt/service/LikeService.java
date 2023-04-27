@@ -18,7 +18,7 @@ public class LikeService {
 
     //게시글 좋아요
     @Transactional
-    public ResponseDto<?> Likes(Long postId, User user){
+    public ResponseDto<?> postLikes(Long postId, User user){
         Post post = methodService.getPostIfExists(postId);
         if(methodService.postLikeCheck(user, post)){//좋아요가 있으면 DB에서 삭제, 없으면 생성
             postLikeRepository.deleteByUserIdAndPostId(user.getId(), postId);
@@ -33,14 +33,13 @@ public class LikeService {
 
     //댓글 좋아요
     @Transactional
-    public ResponseDto<?> Likes(Long postId, Long commentId, User user) {
-        Post post = methodService.getPostIfExists(postId);
+    public ResponseDto<?> commentLikes(Long commentId, User user) {
         Comment comment =  methodService.checkComment(commentId);
-        if(methodService.commentLikeCheck(user, post, comment))  {//좋아요가 있으면 DB에서 삭제, 없으면 생성
+        if(methodService.commentLikeCheck(user, comment))  {//좋아요가 있으면 DB에서 삭제, 없으면 생성
             commentLikeRepository.deleteByUserIdAndCommentId(user.getId(), commentId);
         } else {
-           CommentLikes like = new CommentLikes(user, comment);
-           commentLikeRepository.save(like);
+           CommentLikes commentLikes = new CommentLikes(user, comment);
+           commentLikeRepository.save(commentLikes);
         }
         long likesCheck = commentLikeRepository.countByCommentId(commentId);
         comment.checkLikes(likesCheck);

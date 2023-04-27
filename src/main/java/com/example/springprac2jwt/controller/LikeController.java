@@ -18,16 +18,16 @@ public class LikeController {
     private final LikeService likesService;
 
     //게시글 좋아요
-    @PostMapping("like/{postId}")
+    @PostMapping("postLikes/{postId}")
     public ResponseDto<?> postLikes(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return likesService.Likes(postId, userDetails.getUser());
+        return likesService.postLikes(postId, userDetails.getUser());
     }
 
 
 
     //댓글 좋아요
-    @PostMapping("like/{postId}/{commentId}")
-    public ResponseDto<?> commentLikes(@PathVariable Long postId, @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return likesService.Likes(postId, commentId, userDetails.getUser());
+    @PostMapping("commentLikes/{commentId}")
+    public ResponseDto<?> commentLikes(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return likesService.commentLikes(commentId, userDetails.getUser());
     }
 }
