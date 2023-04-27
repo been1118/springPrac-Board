@@ -8,30 +8,25 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Likes {
+public class CommentLikes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
-    private Long id;    //pk
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;  //fk
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;  //fk
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
-    private Comment comment;    //fk
+    private Comment comment;
 
 
 
-    public Likes(User user, Post post, Comment comment) {
+    public CommentLikes(User user, Comment comment) {
         this.user = user;
-        this.post = post;
         this.comment = comment;
     }
 }
