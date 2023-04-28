@@ -94,7 +94,7 @@ public class UserService {
         return ResponseDto.setSuccess(user);
     }
     @Transactional
-    public ResponseDto<?> logout(User user) {
+    public ResponseDto<?> logout(User user, HttpServletResponse response) {
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(user.getUsername());
         if(refreshToken.isPresent()){
             refreshTokenRepository.deleteByUsername(user.getUsername());
