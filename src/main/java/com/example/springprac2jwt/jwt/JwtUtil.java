@@ -120,9 +120,6 @@ public class JwtUtil {
         System.out.println("refreshTokenValid : "+ token);
         if (!validateToken(token)) return false;
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(getUserInfoFromToken(token));
-        System.out.println("0. RefreshToken 검증 테스트 : " + (refreshToken.isPresent() && token.equals(refreshToken.get().getRefreshToken())));
-        System.out.println("0. RefreshToken 검증 테스트 : " + token);
-        System.out.println("0. RefreshToken 검증 테스트 : " + refreshToken.get().getRefreshToken().substring(7));
         return refreshToken.isPresent() && token.equals(refreshToken.get().getRefreshToken().substring(7));
     }
     public void setHeaderAccessToken(HttpServletResponse response, String accessToken) {
