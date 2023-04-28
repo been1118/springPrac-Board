@@ -38,18 +38,24 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // 토큰이 존재하면 유효성 검사를 수행하고, 유효하지 않은 경우 예외 처리
         if (access_token != null) {
             if (jwtUtil.validateToken(access_token)) {
+                System.out.println("3. access_token이 유효한가? :" + jwtUtil.validateToken(access_token));
                 setAuthentication(jwtUtil.getUserInfoFromToken(access_token));
+                System.out.println("4.  refresh_token !=null : " + refresh_token != null);
+                System.out.println("5.  jwtUtil.refreshTokenValid(refresh_token) :" + jwtUtil.refreshTokenValid(refresh_token));
             } else if (refresh_token != null && jwtUtil.refreshTokenValid(refresh_token)) {
+                System.out.println("6. refresh_token이 null이 아닌가? :" + refresh_token != null);
+                System.out.println("7. refresh_token이 유효한가? :" + jwtUtil.refreshTokenValid(refresh_token));
                 //Refresh토큰으로 유저명 가져오기
                 String username = jwtUtil.getUserInfoFromToken(refresh_token);
                 //유저명으로 유저 정보 가져오기
                 User user = userRepository.findByUsername(username).get();
                 //새로운 ACCESS TOKEN 발급
-                String newAccessToken = jwtUtil.createToken(username, user.getRole(), "ACCESS");
+                String newAccessToken = jwtUtil.createToken(username, user.getRole(), "Access");
                 //Header에 ACCESS TOKEN 추가
                 jwtUtil.setHeaderAccessToken(response, newAccessToken);
                 setAuthentication(username);
             } else if (refresh_token == null) {
+                System.out.println("8. refresh_token 1 :" + refresh_token);
                 jwtExceptionHandler(response, "AccessToken Expired.", HttpStatus.BAD_REQUEST.value());
                 return;
             } else {

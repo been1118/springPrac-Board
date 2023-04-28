@@ -117,6 +117,7 @@ public class JwtUtil {
 
     //RefreshToken 검증
     public boolean refreshTokenValid(String token) {
+        System.out.println("refreshTokenValid : "+ token);
         if (!validateToken(token)) return false;
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(getUserInfoFromToken(token));
         System.out.println("0. RefreshToken 검증 테스트 : " + (refreshToken.isPresent() && token.equals(refreshToken.get().getRefreshToken())));
