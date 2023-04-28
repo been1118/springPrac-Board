@@ -30,6 +30,7 @@ public class UserService {
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private final MethodService methodService;
 
     //회원가입
     @Transactional
@@ -86,6 +87,7 @@ public class UserService {
         Refresh토큰 존재O -> 새로 발급후 업데이트
         Refresh토큰 존재X -> 새로 생성후 DB에 저장
          */
+        
         if(refreshToken.isPresent()){
             refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
         } else {
@@ -93,13 +95,8 @@ public class UserService {
             refreshTokenRepository.save(newToken);
         }
         //response 헤더에 AccessToken / RefreshToken
-        setHeader(response, tokenDto);
-        //response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+        methodService.setHeader(response, tokenDto);
         return ResponseDto.setSuccess(user);
     }
 
-    private void setHeader(HttpServletResponse response, TokenDto tokenDto){
-        response.addHeader(JwtUtil.ACCESS_KEY, tokenDto.getAccessToken());
-        response.addHeader(JwtUtil.REFRESH_KEY, tokenDto.getRefreshToken());
-    }
 }

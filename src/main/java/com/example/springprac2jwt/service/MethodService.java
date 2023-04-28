@@ -1,7 +1,9 @@
 package com.example.springprac2jwt.service;
 
+import com.example.springprac2jwt.dto.TokenDto;
 import com.example.springprac2jwt.entity.*;
 import com.example.springprac2jwt.exception.CustomException;
+import com.example.springprac2jwt.jwt.JwtUtil;
 import com.example.springprac2jwt.repository.CommentRepository;
 import com.example.springprac2jwt.repository.CommentLikeRepository;
 import com.example.springprac2jwt.repository.PostLikeRepository;
@@ -9,6 +11,7 @@ import com.example.springprac2jwt.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 import static com.example.springprac2jwt.exception.ErrorCode.COMMENT_NOT_FOUND;
@@ -53,5 +56,10 @@ public class MethodService {
             return true;
         }
         return false;
+    }
+    //헤더에 토큰 추가
+    protected void setHeader(HttpServletResponse response, TokenDto tokenDto){
+        response.addHeader(JwtUtil.ACCESS_KEY, tokenDto.getAccessToken());
+        response.addHeader(JwtUtil.REFRESH_KEY, tokenDto.getRefreshToken());
     }
 }
