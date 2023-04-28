@@ -7,6 +7,7 @@ import com.example.springprac2jwt.dto.ResponseDto;
 import com.example.springprac2jwt.dto.SignupRequestDto;
 import com.example.springprac2jwt.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
