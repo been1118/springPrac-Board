@@ -1,11 +1,14 @@
 package com.example.springprac2jwt.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,6 +31,22 @@ public class User {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRole role;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Post> postList = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<PostLikes> postLikes = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<CommentLikes> commentLikes = new ArrayList<>();
 
 
     public User(String username, String password, UserRole role) {

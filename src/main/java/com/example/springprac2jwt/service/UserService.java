@@ -87,7 +87,7 @@ public class UserService {
         Refresh토큰 존재O -> 새로 발급후 업데이트
         Refresh토큰 존재X -> 새로 생성후 DB에 저장
          */
-        
+
         if(refreshToken.isPresent()){
             refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
         } else {
@@ -99,4 +99,15 @@ public class UserService {
         return ResponseDto.setSuccess(user);
     }
 
+    public ResponseDto<?> quit(LoginRequestDto loginRequestDto, User user) {
+        String username = loginRequestDto.getUsername();
+        String password = loginRequestDto.getPassword();
+
+        if(!passwordEncoder.matches(password, user.getPassword())){
+            return ResponseDto.set(false, 401, "비밀번호가 일치하지 않습니다.");
+        } else {
+            userRepository.deleteById(user.getId());
+        }
+        return ResponseDto.setSuccess(user);
+    }
 }

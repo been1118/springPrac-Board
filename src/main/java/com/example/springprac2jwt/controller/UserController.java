@@ -1,6 +1,7 @@
 package com.example.springprac2jwt.controller;
 
 
+import com.example.springprac2jwt.Security.UserDetailsImpl;
 import com.example.springprac2jwt.dto.LoginRequestDto;
 import com.example.springprac2jwt.dto.ResponseDto;
 import com.example.springprac2jwt.dto.SignupRequestDto;
@@ -28,5 +29,9 @@ public class UserController {
     public ResponseDto<?> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         return userService.login(loginRequestDto, response);
     }
-
+    //회원탈퇴
+    @DeleteMapping("/quit")
+    public ResponseDto<?> quit(LoginRequestDto loginRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.quit(loginRequestDto, userDetails.getUser());
+    }
 }
