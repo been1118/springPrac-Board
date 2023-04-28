@@ -37,8 +37,8 @@ public class JwtUtil {
     private static final String BEARER_PREFIX = "Bearer ";
     public static final String ACCESS_KEY = "ACCESS_KEY";
     public static final String REFRESH_KEY = "REFRESH_KEY";
-    private static final Date ACCESS_TIME = (Date) Date.from(Instant.now().plus(1, ChronoUnit.MINUTES));
-    private static final Date REFRESH_TIME = (Date) Date.from(Instant.now().plus(3, ChronoUnit.DAYS));
+    private static final long ACCESS_TIME = 60 * 1000L;
+    private static final long REFRESH_TIME = 60 * 60 * 1000L;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -76,7 +76,7 @@ public class JwtUtil {
                 Jwts.builder()
                         .setSubject(username)
                         .claim(AUTHORIZATION_KEY, role)
-                        .setExpiration(tokenType)
+                        .setExpiration(new Date(date.getTime()+tokenType))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
                         .compact();
