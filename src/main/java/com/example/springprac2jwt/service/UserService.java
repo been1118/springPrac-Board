@@ -83,11 +83,6 @@ public class UserService {
         //Refresh토큰 있는지 확인
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(username);
 
-        /*
-        Refresh토큰 존재O -> 새로 발급후 업데이트
-        Refresh토큰 존재X -> 새로 생성후 DB에 저장
-         */
-
         if(refreshToken.isPresent()){
             refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
         } else {
@@ -98,7 +93,17 @@ public class UserService {
         methodService.setHeader(response, tokenDto);
         return ResponseDto.setSuccess(user);
     }
+    @Transactional
+    public ResponseDto<?> logout(User user) {
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(user.getUsername());
+        if(refreshToken.isPresent()){
+            refreshTokenRepository.deleteByUsername(user.getUsername());
+            return ResponseDto.setSuccess(user.getUsername());
+        }
+        throw new CustomException(CANNOT_FOUND_USER);
+    }
 
+    @Transactional
     public ResponseDto<?> quit(LoginRequestDto loginRequestDto, User user) {
         String password = loginRequestDto.getPassword();
 
@@ -109,4 +114,6 @@ public class UserService {
         }
         return ResponseDto.setSuccess(user);
     }
+
+
 }

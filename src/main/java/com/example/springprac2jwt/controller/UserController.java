@@ -30,6 +30,10 @@ public class UserController {
     public ResponseDto<?> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         return userService.login(loginRequestDto, response);
     }
+    @PostMapping("/logout")
+    public ResponseDto<?> logput(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.logout(userDetails.getUser());
+    }
     //회원탈퇴
     @DeleteMapping("/quit")
     public ResponseDto<?> quit(LoginRequestDto loginRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
