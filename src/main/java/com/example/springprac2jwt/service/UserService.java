@@ -100,7 +100,6 @@ public class UserService {
     }
 
     public ResponseDto<?> quit(LoginRequestDto loginRequestDto, User user) {
-        String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
 
         if(!passwordEncoder.matches(password, user.getPassword())){
