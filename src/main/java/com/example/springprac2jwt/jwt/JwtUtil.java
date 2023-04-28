@@ -90,6 +90,7 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            System.out.println("===토큰 검증 데이터 확인: "+Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token));
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
@@ -118,7 +119,10 @@ public class JwtUtil {
     public boolean refreshTokenValid(String token) {
         if (!validateToken(token)) return false;
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(getUserInfoFromToken(token));
-        return refreshToken.isPresent() && token.equals(refreshToken.get().getRefreshToken());
+        System.out.println("0. RefreshToken 검증 테스트 : " + (refreshToken.isPresent() && token.equals(refreshToken.get().getRefreshToken())));
+        System.out.println("0. RefreshToken 검증 테스트 : " + token);
+        System.out.println("0. RefreshToken 검증 테스트 : " + refreshToken.get().getRefreshToken().substring(7));
+        return refreshToken.isPresent() && token.equals(refreshToken.get().getRefreshToken().substring(7));
     }
     public void setHeaderAccessToken(HttpServletResponse response, String accessToken) {
         response.setHeader(ACCESS_KEY, accessToken);
