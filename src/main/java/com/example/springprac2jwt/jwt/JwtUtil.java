@@ -70,7 +70,7 @@ public class JwtUtil {
     // 토큰 생성
     public String createToken(String username, UserRole role, String tokenName) {
         Date date = new Date();
-        Date tokenType = tokenName.equals("Access") ? ACCESS_TIME : REFRESH_TIME;
+        long tokenType = tokenName.equals("Access") ? ACCESS_TIME : REFRESH_TIME;
 
         return BEARER_PREFIX +
                 Jwts.builder()
