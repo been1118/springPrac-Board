@@ -90,7 +90,6 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            System.out.println("===토큰 검증 데이터 확인: "+Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token));
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
@@ -117,7 +116,6 @@ public class JwtUtil {
 
     //RefreshToken 검증
     public boolean refreshTokenValid(String token) {
-        System.out.println("refreshTokenValid : "+ token);
         if (!validateToken(token)) return false;
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(getUserInfoFromToken(token));
         return refreshToken.isPresent() && token.equals(refreshToken.get().getRefreshToken().substring(7));
