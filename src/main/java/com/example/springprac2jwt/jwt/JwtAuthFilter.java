@@ -33,6 +33,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String access_token = jwtUtil.resolveToken(request, jwtUtil.ACCESS_KEY);
         String refresh_token = jwtUtil.resolveToken(request, jwtUtil.REFRESH_KEY);
 
+        System.out.println("1. refresh_token이 null이 아닌가? :" + refresh_token != null);
+        System.out.println("2. refresh_token이 유효한가? :" + jwtUtil.refreshTokenValid(refresh_token));
         // 토큰이 존재하면 유효성 검사를 수행하고, 유효하지 않은 경우 예외 처리
         if (access_token != null) {
             if (jwtUtil.validateToken(access_token)) {
@@ -51,10 +53,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 jwtExceptionHandler(response, "AccessToken Expired.", HttpStatus.BAD_REQUEST.value());
                 return;
             } else {
+                System.out.println("9. refresh_token 2 : " + refresh_token);
                 jwtExceptionHandler(response, "RefreshToken Expired.", HttpStatus.BAD_REQUEST.value());
                 return;
             }
         }
+
         // 다음 필터로 요청과 응답을 전달하여 필터 체인 계속 실행
         filterChain.doFilter(request, response);
     }
