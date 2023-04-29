@@ -24,7 +24,6 @@ public class ReadService {
     //게시글 전체 조회
     @Transactional(readOnly = true)
     public ResponseDto<?> readPosts(int page, int size, String sortBy, boolean isAsc) {
-        //List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc();
         //페이징 처리
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
@@ -40,20 +39,3 @@ public class ReadService {
         return ResponseDto.setSuccess(methodService.getPostIfExists(id));
     }
 }
-
-/*
-package com.sparta.myselectshop.repository;
-
-import com.sparta.myselectshop.entity.Product;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Optional;
-
-public interface ProductRepository extends JpaRepository<Product, Long> {
-    Page<Product> findAllByUserId(Long userId, Pageable pageable);
-    Optional<Product> findByIdAndUserId(Long id, Long userId);
-    Page<Product> findAll(Pageable pageable);
-}
- */
