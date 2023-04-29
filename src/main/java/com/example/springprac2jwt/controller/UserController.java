@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -35,10 +36,11 @@ public class UserController {
     public ResponseDto<?> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         return userService.login(loginRequestDto, response);
     }
+    //로그아웃
     @PostMapping("/logout")
     @ApiOperation(value = "로그아웃", notes = "로그아웃 설명")
-    public ResponseDto<?> logput(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response){
-        return userService.logout(userDetails.getUser(), response);
+    public ResponseDto<?> logout(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.logout(userDetails.getUser());
     }
     //회원탈퇴
     @DeleteMapping("/quit")
