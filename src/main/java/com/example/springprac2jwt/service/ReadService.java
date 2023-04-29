@@ -4,6 +4,10 @@ import com.example.springprac2jwt.dto.ResponseDto;
 import com.example.springprac2jwt.entity.Post;
 import com.example.springprac2jwt.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,3 +32,20 @@ public class ReadService {
         return ResponseDto.setSuccess(methodService.getPostIfExists(id));
     }
 }
+
+/*
+package com.sparta.myselectshop.repository;
+
+import com.sparta.myselectshop.entity.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    Page<Product> findAllByUserId(Long userId, Pageable pageable);
+    Optional<Product> findByIdAndUserId(Long id, Long userId);
+    Page<Product> findAll(Pageable pageable);
+}
+ */
