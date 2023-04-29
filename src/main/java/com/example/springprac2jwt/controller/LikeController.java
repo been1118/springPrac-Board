@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api")
-@Api(value = "LikeController", description = "좋아요 관련 API")
+//@Api(value = "LikeController", description = "좋아요 관련 API")
 public class LikeController {
 
     private final LikeService likesService;
 
     //게시글 좋아요
     @PostMapping("postLikes/{postId}")
-    @ApiOperation(value = "게시글 좋아요 기능", notes = "게시글 좋아요 기능 설명")
+//    @ApiOperation(value = "게시글 좋아요 기능", notes = "게시글 좋아요 기능 설명")
     public ResponseDto<?> postLikes(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likesService.postLikes(postId, userDetails.getUser());
     }
@@ -31,7 +31,7 @@ public class LikeController {
 
     //댓글 좋아요
     @PostMapping("commentLikes/{commentId}")
-    @ApiOperation(value = "댓글 좋아요 기능", notes = "댓글 좋아요 기능 설명")
+//    @ApiOperation(value = "댓글 좋아요 기능", notes = "댓글 좋아요 기능 설명")
     public ResponseDto<?> commentLikes(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return likesService.commentLikes(commentId, userDetails.getUser());
     }
