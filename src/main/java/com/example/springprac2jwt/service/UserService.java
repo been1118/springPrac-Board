@@ -12,7 +12,6 @@ import com.example.springprac2jwt.jwt.JwtUtil;
 import com.example.springprac2jwt.repository.RefreshTokenRepository;
 import com.example.springprac2jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,7 +95,7 @@ public class UserService {
     }
     //로그아웃
     @Transactional
-    public ResponseDto<?> logout(User user) {
+    public ResponseDto<?> logout(User user, HttpServletResponse response) {
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(user.getUsername());
         if(refreshToken.isPresent()){
             refreshTokenRepository.deleteByUsername(user.getUsername());

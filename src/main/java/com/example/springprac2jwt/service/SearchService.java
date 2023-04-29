@@ -11,29 +11,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @RequiredArgsConstructor
-public class ReadService {
-
+public class SearchService {
     private final PostRepository postRepository;
-    private final MethodService methodService;
 
-    //게시글 전체 조회
     @Transactional(readOnly = true)
-    public ResponseDto<?> readPosts(int page, int size, String sortBy, boolean isAsc) {
-        //페이징 처리
+    public ResponseDto<?> searchPost(String searchKeyword, int page, int size, String sortBy, boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
+
         Pageable pageable = PageRequest.of(page, size, sort);
-
-        Page<Post> postPage = postRepository.findAll(pageable);
-
-        return ResponseDto.setSuccess(postPage);
-    }
-    //게시글 상세 조회
-    @Transactional(readOnly = true)
-    public ResponseDto<?> readPost(Long id) {
-        return ResponseDto.setSuccess(methodService.getPostIfExists(id));
+        Page<Post> searchPost = postRepository.findAllByTitleContaining(searchKeyword, pageable);
+        return ResponseDto.setSuccess(searchPost);
     }
 }

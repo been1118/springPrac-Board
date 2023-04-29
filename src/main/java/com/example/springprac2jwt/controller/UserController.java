@@ -33,8 +33,8 @@ public class UserController {
         return userService.login(loginRequestDto, response);
     }
     @PostMapping("/logout")
-    public ResponseDto<?> logout(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.logout(userDetails.getUser());
+    public ResponseDto<?> logout(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response){
+        return userService.logout(userDetails.getUser(), response);
     }
     //회원탈퇴
     @DeleteMapping("/quit")
