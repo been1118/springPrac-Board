@@ -22,8 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig {
-    private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
+    private final JwtAuthFilter jwtAuthFilter;
 
     private static final String[] PERMIT_URL_ARRAY = {
 /* swagger v2 */
@@ -71,7 +70,7 @@ public class WebSecurityConfig {
                 .anyRequest().authenticated();
 
         // JWT 인증/인가를 사용하기 위한 설정
-        http.addFilterBefore(new JwtAuthFilter(jwtUtil, userRepository), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

@@ -8,4 +8,5 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByOrderByCreatedAtDesc(); //작성날짜 기준 정렬
 
+
 }

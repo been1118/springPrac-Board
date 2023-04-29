@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
@@ -22,9 +23,16 @@ public class ReadService {
 
     //게시글 전체 조회
     @Transactional(readOnly = true)
-    public ResponseDto<?> readPosts() {
-        List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc();
-        return ResponseDto.setSuccess(postList);
+    public ResponseDto<?> readPosts(int page, int size, String sortBy, boolean isAsc) {
+        //List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc();
+        //페이징 처리
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Post> postPage = postRepository.findAll(pageable);
+
+        return ResponseDto.setSuccess(postPage);
     }
     //게시글 상세 조회
     @Transactional(readOnly = true)

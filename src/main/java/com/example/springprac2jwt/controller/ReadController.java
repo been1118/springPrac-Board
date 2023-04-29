@@ -6,7 +6,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor
 @RestController
@@ -17,9 +20,14 @@ public class ReadController {
 
     //게시글 전체조회
     @GetMapping("/api/read")
-    public ResponseDto<?> readPosts(){
-        return readService.readPosts();
+    public ResponseDto<?> readPosts(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc) {
+        return readService.readPosts(page-1, size, sortBy, isAsc);
     }
+
     //게시글 상세조회
     @GetMapping("/api/read/{id}")
     public ResponseDto<?> readPost(@PathVariable Long id) {
