@@ -25,6 +25,19 @@ public class WebSecurityConfig {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
+    private static final String[] PERMIT_URL_ARRAY = {
+/* swagger v2 */
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+/* swagger v3 */
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -42,22 +55,18 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // CSRF 설정
-        http.csrf().disable();
 
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // 접근 허용 설정
-        http.authorizeRequests()
+        http.csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/api/user/**").permitAll()
                 // 로그인 안 한 사용자도 전체 게시글 목록 조회 가능하도록 허용
                 .antMatchers("/api/read/**").permitAll()
                 //swagger
-//                .antMatchers("/swagger-resources/**").permitAll()
-//                .antMatchers("/swagger-ui.html").permitAll()
-//                .antMatchers("/v2/api-docs").permitAll()
-//                .antMatchers("/webjars/**").permitAll()
+                .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 // 그 외의 어떤 요청이든 인증처리 하겠다는 의미
                 .anyRequest().authenticated();
 
