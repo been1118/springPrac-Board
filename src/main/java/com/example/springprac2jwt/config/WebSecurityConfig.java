@@ -1,8 +1,6 @@
 package com.example.springprac2jwt.config;
 
 import com.example.springprac2jwt.jwt.JwtAuthFilter;
-import com.example.springprac2jwt.jwt.JwtUtil;
-import com.example.springprac2jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +23,6 @@ public class WebSecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
 
     private static final String[] PERMIT_URL_ARRAY = {
-/* swagger v2 */
             "/v2/api-docs",
             "/swagger-resources",
             "/swagger-resources/**",
@@ -33,7 +30,6 @@ public class WebSecurityConfig {
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
-/* swagger v3 */
             "/v3/api-docs/**",
             "/swagger-ui/**"
     };
