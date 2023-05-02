@@ -9,19 +9,21 @@ import com.example.springprac2jwt.entity.User;
 import com.example.springprac2jwt.entity.UserRole;
 import com.example.springprac2jwt.exception.CustomException;
 import com.example.springprac2jwt.jwt.JwtUtil;
+import com.example.springprac2jwt.redis.RedisUtil;
 import com.example.springprac2jwt.repository.RefreshTokenRepository;
 import com.example.springprac2jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 import static com.example.springprac2jwt.exception.ErrorCode.CANNOT_FOUND_USER;
 import static com.example.springprac2jwt.exception.ErrorCode.NOT_MATCH_ADMIN_TOKEN;
+import static com.example.springprac2jwt.jwt.JwtUtil.ACCESS_KEY;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final MethodService methodService;
+    private final RedisUtil redisUtil;
 
     //회원가입
     @Transactional
@@ -96,9 +99,13 @@ public class UserService {
     }
     //로그아웃
     @Transactional
-    public ResponseDto<?> logout(User user) {
+    public ResponseDto<?> logout(User user, HttpServletRequest request) {
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(user.getUsername());
+
+        String accessToken = request.getHeader("ACCESS_KEY").substring(7);
         if(refreshToken.isPresent()){
+            Long tokenTime = jwtUtil.getExpirationTime(accessToken);
+            redisUtil.setBlackList(accessToken, "access_token", tokenTime);
             refreshTokenRepository.deleteByUsername(user.getUsername());
             return ResponseDto.setSuccess(user.getUsername());
         }
@@ -112,6 +119,7 @@ public class UserService {
         if(!passwordEncoder.matches(password, user.getPassword())){
             return ResponseDto.set(false, 401, "비밀번호가 일치하지 않습니다.");
         } else {
+            refreshTokenRepository.deleteByUsername(user.getUsername());
             userRepository.deleteById(user.getId());
         }
         return ResponseDto.setSuccess(user);

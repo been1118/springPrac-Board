@@ -12,7 +12,7 @@ public class CommentLikes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "like_id")
+//    @Column(name = "like_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

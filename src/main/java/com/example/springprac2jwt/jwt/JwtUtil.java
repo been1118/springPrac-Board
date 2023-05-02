@@ -6,6 +6,8 @@ import com.example.springprac2jwt.Security.UserDetailsServiceImpl;
 import com.example.springprac2jwt.dto.TokenDto;
 import com.example.springprac2jwt.entity.RefreshToken;
 import com.example.springprac2jwt.entity.UserRole;
+import com.example.springprac2jwt.exception.CustomException;
+import com.example.springprac2jwt.redis.RedisUtil;
 import com.example.springprac2jwt.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -13,6 +15,7 @@ import io.jsonwebtoken.security.SecurityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,11 +26,11 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Key;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Optional;
+
+import static com.example.springprac2jwt.exception.ErrorCode.CANNOT_FOUND_USER;
 
 @Slf4j
 @Component
@@ -37,8 +40,8 @@ public class JwtUtil {
     private static final String BEARER_PREFIX = "Bearer ";
     public static final String ACCESS_KEY = "ACCESS_KEY";
     public static final String REFRESH_KEY = "REFRESH_KEY";
-    private static final long ACCESS_TIME = 60 * 1000L;
-    private static final long REFRESH_TIME = 60 * 60 * 1000L;
+    private static final long ACCESS_TIME = 60 * 60 * 1000L;
+    private static final long REFRESH_TIME = 60 * 60 * 24 * 1000L;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -46,6 +49,7 @@ public class JwtUtil {
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     private final UserDetailsServiceImpl userDetailsService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisUtil redisUtil;
 
     public TokenDto creatAllToken(String username, UserRole userRole){
         return new TokenDto(createToken(username, userRole, "Access"), createToken(username, userRole, "Refresh"));
@@ -85,6 +89,8 @@ public class JwtUtil {
 
     // 토큰 검증
     public boolean validateToken(String token) {
+        if(redisUtil.hasKeyBlackList(token))
+            return false;
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -119,5 +125,19 @@ public class JwtUtil {
     }
     public void setHeaderAccessToken(HttpServletResponse response, String accessToken) {
         response.setHeader(ACCESS_KEY, accessToken);
+    }
+
+    public long getExpirationTime(String token) {
+        // 토큰에서 만료 시간 정보를 추출합니다.
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+
+        // 현재 시간과 만료 시간의 차이를 계산하여 반환합니다.
+        Date expirationDate = claims.getExpiration();
+        Date now = new Date();
+        long diff = expirationDate.getTime() - now.getTime();
+        return diff / 1000; // 초 단위로 반환합니다.
     }
 }
