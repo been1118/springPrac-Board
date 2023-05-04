@@ -128,16 +128,16 @@ public class JwtUtil {
     }
 
     public long getExpirationTime(String token) {
-        // 토큰에서 만료 시간 정보를 추출합니다.
+        // 토큰에서 만료 시간 정보를 추출
         Claims claims = Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
 
-        // 현재 시간과 만료 시간의 차이를 계산하여 반환합니다.
+        // 현재 시간과 만료 시간의 차이를 계산하여 반환
         Date expirationDate = claims.getExpiration();
         Date now = new Date();
-        long diff = expirationDate.getTime() - now.getTime();
-        return diff / 1000; // 초 단위로 반환합니다.
+        long diff = (expirationDate.getTime() - now.getTime()) / 1000;
+        return diff;
     }
 }
