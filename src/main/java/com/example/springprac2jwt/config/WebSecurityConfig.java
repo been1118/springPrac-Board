@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.ServletException;
@@ -48,13 +51,17 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
         //비번 암호화 기능
     }
-
+//    @Override
+//    public void configure(WebSecurity web) throws Exception{
+//        web
+//                .ignoring()
+//                .antMatchers("/api/read/**");
+//    }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-        // h2-console 사용 및 resources 접근 허용 설정
     }
 
     @Bean
@@ -66,27 +73,25 @@ public class WebSecurityConfig {
 
         // 접근 허용 설정
         http.authorizeRequests()
-                .antMatchers("/api/user/**").permitAll()
-                // 로그인 안 한 사용자도 전체 게시글 목록 조회 가능하도록 허용
-                .antMatchers("/api/read/**").permitAll()
+                .antMatchers("/api/user/login").permitAll()
+                .antMatchers("/api/user/signup").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/read/**").permitAll()
                 //swagger
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
-                // 그 외의 어떤 요청이든 인증처리 하겠다는 의미
+
                 .anyRequest().authenticated();
-
         http.exceptionHandling()
-                .authenticationEntryPoint(new AuthenticationEntryPoint() {
-
-                    @Override
-                    public void commence(HttpServletRequest request, HttpServletResponse response,
-                                         AuthenticationException authException) throws IOException, ServletException {
-                        toResponseEntity(CANNOT_FOUND_USER);
-                    }
+                .authenticationEntryPoint((request, response, authException) ->
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "authentication failed"))
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
                 });
 
         // JWT 인증/인가를 사용하기 위한 설정
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        http.httpBasic();
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthFilter, ExceptionTranslationFilter.class);
+
+
         return http.build();
     }
 

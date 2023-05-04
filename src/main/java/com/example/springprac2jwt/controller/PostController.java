@@ -3,6 +3,8 @@ package com.example.springprac2jwt.controller;
 import com.example.springprac2jwt.Security.UserDetailsImpl;
 import com.example.springprac2jwt.dto.PostRequestDto;
 import com.example.springprac2jwt.dto.ResponseDto;
+import com.example.springprac2jwt.exception.CustomException;
+import com.example.springprac2jwt.exception.ErrorCode;
 import com.example.springprac2jwt.service.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +35,6 @@ public class PostController {
     public ResponseDto<?> deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return postService.deletePost(id, userDetails.getUser());
     }
+
 }
 

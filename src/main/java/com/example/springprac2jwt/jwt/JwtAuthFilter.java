@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import java.io.IOException;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@WebFilter(urlPatterns = "/api/read/**")
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
@@ -34,9 +36,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // JWT 토큰을 해석하여 추출
         String access_token = jwtUtil.resolveToken(request, jwtUtil.ACCESS_KEY);
         String refresh_token = jwtUtil.resolveToken(request, jwtUtil.REFRESH_KEY);
-
         // 토큰이 존재하면 유효성 검사를 수행하고, 유효하지 않은 경우 예외 처리
-        if (access_token != null) {
+        if(access_token == null){
+            filterChain.doFilter(request, response);
+        } else {
             if (jwtUtil.validateToken(access_token)) {
                 setAuthentication(jwtUtil.getUserInfoFromToken(access_token));
             } else if (refresh_token != null && jwtUtil.refreshTokenValid(refresh_token)) {
@@ -59,7 +62,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } else {
             jwtExceptionHandler(response, "AccessToken Empty", HttpStatus.BAD_REQUEST.value());
         }
-
         // 다음 필터로 요청과 응답을 전달하여 필터 체인 계속 실행
         filterChain.doFilter(request, response);
     }
