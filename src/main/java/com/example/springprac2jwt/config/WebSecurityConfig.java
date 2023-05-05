@@ -1,5 +1,6 @@
 package com.example.springprac2jwt.config;
 
+import com.example.springprac2jwt.exception.ErrorResponse;
 import com.example.springprac2jwt.jwt.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

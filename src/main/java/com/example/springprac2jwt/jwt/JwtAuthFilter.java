@@ -59,8 +59,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 jwtExceptionHandler(response, "RefreshToken Expired.", HttpStatus.BAD_REQUEST.value());
                 return;
             }
-        } else {
-            jwtExceptionHandler(response, "AccessToken Empty", HttpStatus.BAD_REQUEST.value());
         }
         // 다음 필터로 요청과 응답을 전달하여 필터 체인 계속 실행
         filterChain.doFilter(request, response);
